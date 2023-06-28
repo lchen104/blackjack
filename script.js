@@ -20,8 +20,11 @@ let dealer = {
 }
 
 
-let message = ""
-let messageEl = document.getElementById("message-el")
+let playerMessage = ""
+let playerMessageEl = document.getElementById("player-message-el")
+
+let dealerMessage = ""
+let dealerMessageEl = document.getElementById("dealer-message-el")
 
 let playerSumEl = document.getElementById("player-sum-el")
 let dealerSumEl = document.getElementById("dealer-sum-el")
@@ -42,8 +45,15 @@ function newGame() {
     // console.log(dealer);
     // console.log(player.name);
     // console.log(player.chips);
+    dealerMessage = "";
+    playerMessage = "";
+    dealer.sum = 0;
+    player.sum = 0;
+    dealerCardsEl.innerHTML = `<img class="cardImg" src="/imgs/BACK.png">`;
+    dealerSumEl.textContent = 'Dealer Sum:';
+
     if (player.chips < 20) {
-        messageEl.textContent = "Sorry, you do not have enough funds to play";
+        playerMessageEl.textContent = "Sorry, you do not have enough funds to play";
     } else {
         player.isAlive = true;
         player.hasBlackJack = false;
@@ -68,9 +78,9 @@ function newGame() {
 }
 
 function getRandomCard() {
-    return andomNum = Math.floor( Math.random()*11 ) + 1;
+    return andomNum = Math.floor(Math.random()*11) + 1;
 
-    // let randomNum = Math.floor( Math.random()*13 ) + 1;
+    // let randomNum = Math.floor(Math.random()*13) + 1;
     // if (randomNum > 10) {
     //     return 10;
     // } else if (randomNum === 1) {
@@ -114,14 +124,14 @@ function renderGame() {
     // dealerSumEl.textContent = "Dealer Sum: " + dealer.sum
 
     if (player.sum <= 20) {
-        message = "Do you want to draw a new card?"
+        playerMessage = "Do you want to draw a new card?"
     } else if (player.sum === 21) {
-        message = "You've got Blackjack!"
+        playerMessage = "You've got Blackjack!"
         player.hasBlackJack = true;
         // player.chips += 20;
         playerEl.textContent = player.name + ": $" + player.chips;
     } else {
-        message = "You're out of the game!"
+        playerMessage = "You're out of the game!"
         // console.log(this.chips)
         player.chips -= 20;
         dealer.chips += 20;
@@ -130,7 +140,7 @@ function renderGame() {
         playerEl.textContent = player.name + ": $" + player.chips;
         dealerEl.textContent = dealer.name + ": $" + dealer.chips;
     }
-    messageEl.textContent = message
+    playerMessageEl.textContent = playerMessage;
 }
 
 function newCard() {
@@ -144,7 +154,7 @@ function newCard() {
 }
 
 function stand() {
-    if (player.sum > 0) {
+    if (player.sum > 0 && player.isAlive === true) {
         player.isAlive = false;
         dealer.isAlive = true;
         dealer.hasBlackJack = false;
@@ -155,6 +165,8 @@ function stand() {
         dealer.cards = [dealerFirstCard, dealerSecondCard];
         dealer.sum = dealerFirstCard + dealerSecondCard;
         dealersTurn();
+        player.sum = 0;
+        
     }
     
 }
@@ -169,7 +181,7 @@ function dealersTurn() {
     console.log('Dealers turn!');
     console.log(dealer.chips);
     
-    // message = "Dealer Draws"
+    // dealerMessage = "Dealer Draws"
 
     dealerCardsEl.textContent = "Dealer Cards: "
     for (let j = 0; j < dealer.cards.length; j++) {
@@ -210,13 +222,14 @@ function dealersTurn() {
             dealersTurn();    
         }
     } else if (dealer.sum === 21) {
-        message = "Dealer got Blackjack!"
+        dealerMessage = "Dealer got Blackjack!"
+        playerMessage = "Sorry, you lost!"
         dealer.hasBlackJack = true;
-        // dealer.chips += 20;
-        // player.chips -= 20;
+        dealer.chips += 20;
+        player.chips -= 20;
         // dealerEl.textContent = dealer.name + ": $" + dealer.chips;
     } else {
-        // message = "Dealer is out of the game!"
+        // dealerMessage = "Dealer is out of the game!"
         // console.log(dealer.chips)
         // dealer.chips -= 20;
         // player.chips += 20;
@@ -224,11 +237,12 @@ function dealersTurn() {
         dealer.isAlive = false;
 
         if (dealer.sum < 22 && dealer.sum > player.sum) {
-            message = "Dealer WINS!"
+            dealerMessage = "Dealer WINS!"
+            playerMessage = ""
             player.chips -= 20;
             dealer.chips += 20;
         } else {
-            message = "Player WINS!"
+            playerMessage = "Player WINS!"
             player.chips += 20;
             dealer.chips -= 20;
         }
@@ -236,5 +250,6 @@ function dealersTurn() {
         playerEl.textContent = player.name + ": $" + player.chips;
         dealerEl.textContent = dealer.name + ": $" + dealer.chips;
     }
-    messageEl.textContent = message
+    playerMessageEl.textContent = playerMessage
+    dealerMessageEl.textContent = dealerMessage
 }

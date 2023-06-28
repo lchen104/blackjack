@@ -5,24 +5,28 @@
     <body>
 
         <div class="container">
-            <h1>Blackjack</h1>
-            <p id="message-el">Want to play a round?</p>
+            <h1>Black<span>jack</span></h1>
+            <p id="dealer-message-el"></p>
             <div id="dealer">
                 <p id="dealer-cards-el">Dealer Cards: <img class="cardImg" src="/imgs/BACK.png"></p>
                 <p id="dealer-sum-el">Dealer Sum:</p>
             </div>
+
+            <p id="player-message-el">Want to play?</p>
             <div id="player">
-                
                 <p id="player-cards-el">Player Cards: <img class="cardImg" src="/imgs/BACK.png"></p>
                 <p id="player-sum-el">Player Sum:</p>
             </div>
+        
+            <button onclick="newGame()">New Game</button>
+            <button onclick="stand()">Stand</button>
+            <button onclick="newCard()">New Card</button>
+            <button onclick="addFunds()">Add Funds</button>
+
+            <p id="player-el"></p>
+            <p id="dealer-el"></p>
         </div>
-        <button onclick="newGame()">New Game</button>
-        <button onclick="stand()">Stand</button>
-        <button onclick="newCard()">New Card</button>
-        <button onclick="addFunds()">Add Funds</button>
-        <p id="player-el"></p>
-        <p id="dealer-el"></p>
+
         <script src="script.js"></script>
     </body>
 </html>
